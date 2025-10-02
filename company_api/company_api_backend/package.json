@@ -1,0 +1,27 @@
+{
+  "name": "company_api_backend",
+  "description": "Backend built using express mongoose jsonwebtoken and nodemailer",
+  "keywords": [
+    "Express",
+    "Mongoose",
+    "JWT Token",
+    "Nodemailer"
+  ],
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.2",
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.6",
+    "otp-generator": "^4.0.1"
+  }
+}

@@ -1,0 +1,98 @@
+body{
+    margin:0;
+    padding: 0;
+    /* overflow:hidden; */
+     font-family: "Ubuntu", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+label{
+     font-family: "Ubuntu", sans-serif;
+     font-size:1vw;
+  font-style: normal;
+  margin: 1vw 0 0.3vw;
+  display: block;
+}
+
+
+
+@keyframes loader1{
+  0%{
+    height:45%;
+  }
+   20%{
+    height:70%;
+  }
+   50%{
+    height:100%;
+   }
+   80%{
+    height:70%;
+   }
+    100%{
+    height:45%;
+  }
+}
+
+.loader1{
+  animation-name: loader1;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  
+}
+
+@keyframes loader2{
+  0%{
+    height:30%;
+  }
+   20%{
+    height:50%;
+  }
+   50%{
+    height:80%;
+   }
+   80%{
+    height:50%;
+
+   }
+    100%{
+    height:30%;
+  }
+}
+.loader2{
+  animation-name: loader2;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+
+@keyframes loader3{
+  0%{
+    height:20%;
+  }
+   20%{
+    height:40%;
+  }
+   50%{
+    height:70%;
+   }
+   80%{
+    height:40%;
+   }
+    100%{
+    height:20%;
+  }
+}
+.loader3{
+  animation-name: loader3;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;}
+
+
+  .label1{
+    display:inline-block;
+  }
