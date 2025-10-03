@@ -2,9 +2,14 @@ import {Box,Typography,TextField,Button, TableContainer, Table, TableBody, Table
 import {Controller, useForm} from 'react-hook-form';
 import CloudUploadSharpIcon from '@mui/icons-material/CloudUploadSharp';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {schema_create_company} from '../Validators/Validators'
+import {schema_create_company} from '../Validators/Validators';
+import  axios from 'axios';
+import {useEffect, useState} from 'react';
+import Loading from '../LoadingComponent/Loading';
+import  ToastMessage from '../Toasts/ToastMessage';
 const CreatePage =()=>{
-   const {control,handleSubmit,register,formState:{errors},watch} = useForm({defaultValues:{
+    const [state,isLoading] = useState(false);
+    const {control,handleSubmit,register,formState:{errors},watch} = useForm({defaultValues:{
     company_name:'',
     about_company:'',
     yof:2025,
@@ -17,11 +22,43 @@ const CreatePage =()=>{
 const options = [ 'Product based','Service based','Sass','Select a value'];
 const file = watch('company_logo');
 
-   const onSubmit=(e)=>{
-console.log(e)
+
+   const onSubmit=async(e)=>{
+    const formData = new FormData();
+    formData.append('company_name',e.company_name)
+    formData.append('about_company',e.about_company)
+    formData.append('founded_year',e.yof)
+    formData.append('emp_count',e.emp_count)
+    formData.append('company_type',e.comp_type)
+    formData.append('revenue',e.revenue)
+    formData.append('company_logo',e.company_logo[0])
+try{
+    isLoading(true);
+ const data = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/add_company`,formData,{
+ headers:{
+    'Content-type':'multipart/formdata'
+    }
+  }) 
+
+  if(data != undefined)
+     { 
+        
+     }
+  else 
+  {
+    isLoading(false);
+     throw new Error('Error while adding!!')
+  }
+    
+}
+catch(err){
+    isLoading(false);
+    console.log(err)
+    }
    }
     return(<>
-
+    
+{state === true ? <Loading/> : <>
    <Box sx={{width:"100%",margin:"0.5vw 0vw 2vw"}}>
         <Typography>Create New record</Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -161,6 +198,7 @@ lineHeight:'1.66',textAlign: 'left',marginTop: '3px',marginRight: '0',marginBott
 <Button type='submit' sx={{textTransform:"none",marginTop:"1.5vw"}} variant="contained" disableRipple>Create</Button>
         </form>
         </Box>
+        </>}
     </>)
 }
 

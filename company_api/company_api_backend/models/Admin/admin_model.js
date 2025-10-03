@@ -21,7 +21,8 @@ const schema = mongoose.Schema({
     },
     logo:{
         type:Buffer
-    },
+    }
+    ,
          location:{type:String},
          street:{type:String},
          zip:{type:String}

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const schema = new mongoose.schema({
+const schema = new mongoose.Schema({
     name:{
         type:String,
         required:true,
@@ -28,15 +28,16 @@ const schema = new mongoose.schema({
     },
     logo:{
         type:Buffer,
-        required:true
-    },
-    address:{
-       type:[{
-         location:{type:String,required:true},
-         street:{type:String,required:true},
-         zip:{type:String,required:true}
-       }]
+        required:true,
+        unique:true
     }
+    // address:{
+    //    type:[{
+    //      location:{type:String,required:true},
+    //      street:{type:String,required:true},
+    //      zip:{type:String,required:true}
+    //    }]
+    // }
 })
 
 module.exports = mongoose.model('company_db',schema);

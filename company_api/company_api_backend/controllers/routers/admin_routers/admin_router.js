@@ -6,6 +6,8 @@ const dotenv = require('dotenv');
 dotenv.config({path: path.join(process.cwd()+'/config/.env')});
 const jwt = require('jsonwebtoken');
 const otp = require('otp-generator');
+const fs = require('fs');
+const company_table = require('../../../models/Company/company_model');
 
 
 //Email setup
@@ -177,4 +179,43 @@ catch(err){
 }
    
 }
-module.exports = {admin_signup,admin_count,admin_login,admin_sendotp,admin_verify_otp}
+
+//add new company
+const add_company = async(req,res,next)=>{
+    try{
+      
+   const find_by_name = await company_table.find({name:req.body.name});
+
+   if(find_by_name.length == 0 )
+   {
+    const add_value = await company_table.create({
+    name: req.body.company_name,
+    about: req.body.about_company,
+    year: req.body.founded_year,
+    employee_count: req.body.emp_count,
+    company_type: req.body.company_type,
+    total_revenue: req.body.revenue,
+    logo: fs.readFileSync(req.file.path)
+   })
+
+    if (add_value != undefined || add_value!='')
+        res.json({msg:'Data created succesfully!!'})
+    else
+    {
+        const error = new Error('Unable to save Company details');
+        error.status = 500;
+        next(error)
+    }
+    }
+else{
+        const error = new Error('Company Details already exist!!');
+        error.status = 500;
+        next(error)
+    }
+    }
+    catch(err)
+     { 
+        next(err)
+     }
+}
+module.exports = {admin_signup,admin_count,admin_login,admin_sendotp,admin_verify_otp,add_company}
