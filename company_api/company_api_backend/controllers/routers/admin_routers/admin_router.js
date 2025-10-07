@@ -28,12 +28,6 @@ const admin_count= async(req,res,next)=>{
 
         if(count != undefined)
              res.json({count:count})
-        else 
-            {
-                const error = new Error('No admin details');
-                error.status=500;
-                next(error)
-            }
     }
     catch(err){
             next(err)
@@ -180,15 +174,27 @@ catch(err){
    
 }
 
+//company count 
+const company_count = async(req,res)=>{
+    try{
+        const count = await company_table.countDocuments();
+        if(count!= undefined )
+             res.json({count:count})
+
+    }
+    catch(err){
+        next(err);
+    } 
+}
 //add new company
 const add_company = async(req,res,next)=>{
     try{
-      
    const find_by_name = await company_table.find({name:req.body.name});
 
    if(find_by_name.length == 0 )
    {
     const add_value = await company_table.create({
+    id: req.body.id,
     name: req.body.company_name,
     about: req.body.about_company,
     year: req.body.founded_year,
@@ -218,4 +224,68 @@ else{
         next(err)
      }
 }
-module.exports = {admin_signup,admin_count,admin_login,admin_sendotp,admin_verify_otp,add_company}
+
+//get company_details
+const get_company_det = async(req,res,next)=>{
+    try{
+    const details = await company_table.find();
+    if(details && details.length>0){
+      res.send(details.map((li)=> {
+        return{
+        id:li.id,
+        name:li.name,
+        about: li.about
+        }
+      }))
+    }
+    else
+        res.json({msg:"No details found"})
+    }
+        catch(err){
+    next(err)}
+}
+
+//get entire company details
+const get_entire_data = async(req,res,next)=>{
+    try{
+    const data = await company_table.find({id:req.query.id});
+
+    if(data.length>0)
+        res.send(data)
+    else
+        res.json({msg:'No data'})
+    }
+    catch(err){
+        next(err)
+    }
+}
+
+//delete company details.
+const delete_company_det = async(req,res,next)=>{
+    try{
+        const data = await company_table.find({id:req.query.id});
+        if(data.length>0)
+        {
+            const del_dat = await company_table.deleteOne({id:req.query.id});
+            if(del_dat.deletedCount == 1)
+                res.json({msg:"success"})
+            else{
+                  const error = new Error('Unable to delete Entries')
+                  error.status = 500;
+                  next(error)
+            }
+
+        }
+        else{
+            const error = new Error('No details found!!')
+            error.status = 400;
+            next(error)
+        }
+    }
+    catch(err){
+        next(err)
+    }
+}
+module.exports = {admin_signup,admin_count,admin_login,admin_sendotp,admin_verify_otp,add_company,company_count,get_company_det
+    ,get_entire_data,delete_company_det
+}

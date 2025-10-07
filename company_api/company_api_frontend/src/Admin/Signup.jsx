@@ -69,7 +69,6 @@ if(localStorage.getItem('jwt') != undefined){
              {
                 isLoading(false);
                 throw new Error('Please retry!!');
-
              }   
         
        let newUser = await  axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/signup`,{id:id,email:e.email,name:e.name,password:e.password})

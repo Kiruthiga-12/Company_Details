@@ -1,16 +1,22 @@
-import { Box, Typography } from "@mui/material";
+import { Snackbar,IconButton } from "@mui/material";
+import { useState } from "react";
+import {Clear} from '@mui/icons-material';
 
 const ToastMessage=(props)=>{
+    const [status,setStatus]= useState(true)
     return(<>
     {props.status =='success' && <>
-   <Box sx={{backgroundColor:'seagreen',color:'whitesmoke',width:"100%"}}>
-   <Typography>{props.message}</Typography>
-   </Box>
+    <Snackbar open={status} message={props.message} anchorOrigin={{vertical:'top',horizontal:"center"}}
+    sx={{'& .MuiSnackbarContent-root':{backgroundColor:"seagreen",color:"whitesmoke"}}} 
+    action={<IconButton><Clear  sx={{color:"whitesmoke"}} onClick={()=>setStatus(false)}/></IconButton>}
+    autoHideDuration={4000}    />
     </>}
-    {props.status =='error' && <>
-    <Box sx={{backgroundColor:'red',color:'whitesmoke'}}>
-   <Typography>{props.message}</Typography>
-   </Box>
+   
+    {props.status == 'error' && <>
+   <Snackbar open={status} message={props.message}  anchorOrigin={{vertical:'top',horizontal:"center"}}
+    sx={{'& .MuiSnackbarContent-root':{backgroundColor:"#d32f2f",color:"whitesmoke"}}} 
+    action={<IconButton><Clear  sx={{color:"whitesmoke"}} onClick={()=>setStatus(false)}/></IconButton>} 
+    autoHideDuration={4000}/>
     </>}
     </>)
 

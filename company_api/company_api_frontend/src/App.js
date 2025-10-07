@@ -5,6 +5,7 @@ import { ThemeProvider,createTheme } from '@mui/material';
 import Admin from './Admin/Admin';
 import SignUp from './Admin/Signup';
 import Dashboard from './Admin/Dashboard';
+import ErrorBoundary from './Error_Handlers/ErrorBoundary';
 const theme= createTheme({
   typography:{
     fontFamily:"Ubuntu",
@@ -18,6 +19,7 @@ const theme= createTheme({
 function App() {
   return (
   <>
+  <ErrorBoundary>
   <ThemeProvider theme={theme}>
   <Routes>
     {/* Admin */}
@@ -28,6 +30,7 @@ function App() {
     <Route path='*' element={<PageNotFound/>}/>
   </Routes>
   </ThemeProvider>
+  </ErrorBoundary>
   </>
   );
 }

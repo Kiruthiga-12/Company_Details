@@ -9,7 +9,8 @@ const Dashboard =()=>{
 
     <Box sx={{width:"98%",margin:"8vw auto",display:"flex",justifyContent:"space-between"}}>
 <Box sx={{flex:2}}>
-        <Button  sx={{textTransform:"none",display:"block"}} variant="contained" disableRipple fullWidth>Dashboard</Button>
+        <Button  sx={{textTransform:"none",display:"block"}} variant="contained" disableRipple fullWidth
+        onClick={()=>setPage('dashboard')}>Dashboard</Button>
    <Button  sx={{textTransform:"none",display:"block",marginTop:"1vw"}} variant="contained" disableRipple fullWidth>Edit Profile</Button>
 <Button  sx={{textTransform:"none",marginTop:"1vw",display:"block"}} variant="contained" disableRipple fullWidth 
 onClick={()=>{
@@ -17,10 +18,11 @@ onClick={()=>{
 nav('/admin');
 }}>Logout</Button>
 </Box>
-<Box sx={{flex:10,border:"1px solid green",marginLeft:"2vw",padding:"1vw",borderRadius:"5px"}}>
-     <DisplayPage/>
-  
+{page=='dashboard' && <>
+<Box sx={{flex:10,border:"1px solid green",marginLeft:"2vw",padding:"1vw",borderRadius:"5px",overflowX:"hidden",marginBottom:"1vw"}}>
+     <DisplayPage />
 </Box>
+</>}
     </Box>
     </>)
 }

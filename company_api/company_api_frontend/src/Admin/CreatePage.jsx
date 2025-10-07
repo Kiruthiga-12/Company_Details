@@ -4,7 +4,7 @@ import CloudUploadSharpIcon from '@mui/icons-material/CloudUploadSharp';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {schema_create_company} from '../Validators/Validators';
 import  axios from 'axios';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import Loading from '../LoadingComponent/Loading';
 import  ToastMessage from '../Toasts/ToastMessage';
 const CreatePage =()=>{
@@ -16,15 +16,31 @@ const CreatePage =()=>{
     emp_count:0,
     comp_type:"Select a value",
     revenue: 100,
-    company_logo:''
-   },resolver:yupResolver(schema_create_company)});
+    company_logo:'',
+    address:[{
+        loc:"Select location",
+        street:"",
+        zipcode:""
+    }]
+   },resolver:yupResolver(schema_create_company),shouldUnregister:true});
 
 const options = [ 'Product based','Service based','Sass','Select a value'];
+const locations = ['Chennai','Mumbai','Hyderabad','Bangalore','Kochi','Delhi','Jaipur','Select location'];
 const file = watch('company_logo');
-
+const [flag, setFlag]=useState(false);
+const [status,setStatus] = useState('');
+const [msg,setMessage] = useState('');
 
    const onSubmit=async(e)=>{
-    const formData = new FormData();
+    
+try{
+    isLoading(true);
+    const c_count = await  axios.get(`${process.env.REACT_APP_BACKEND_URL}/company/count`);
+    if(c_count != undefined){
+    const id = Number(c_count.data.count) +1;
+    if(id !=0){
+        const formData = new FormData();
+    formData.append('id',id);
     formData.append('company_name',e.company_name)
     formData.append('about_company',e.about_company)
     formData.append('founded_year',e.yof)
@@ -32,8 +48,6 @@ const file = watch('company_logo');
     formData.append('company_type',e.comp_type)
     formData.append('revenue',e.revenue)
     formData.append('company_logo',e.company_logo[0])
-try{
-    isLoading(true);
  const data = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/add_company`,formData,{
  headers:{
     'Content-type':'multipart/formdata'
@@ -42,22 +56,36 @@ try{
 
   if(data != undefined)
      { 
-        
+        setStatus('success');
+        setMessage('Company Details added Successfully!!');
+        setFlag(true)
      }
   else 
   {
-    isLoading(false);
+    console.lo('block1')
+     isLoading(false);
      throw new Error('Error while adding!!')
   }
-    
+    }
+else{
+    console.lo('block2')
+  isLoading(false);
+        throw new Error('please try again')   
+}
+    }
+    else{
+        console.lo('block3')
+        isLoading(false);
+        throw new Error('please try again')
+    } 
 }
 catch(err){
+    console.log('block4')
     isLoading(false);
     console.log(err)
     }
    }
     return(<>
-    
 {state === true ? <Loading/> : <>
    <Box sx={{width:"100%",margin:"0.5vw 0vw 2vw"}}>
         <Typography>Create New record</Typography>
@@ -154,18 +182,20 @@ catch(err){
                 </TableCell>
                 </TableRow>
 
-                {/* <TableRow>
+                <TableRow>
                 <TableCell sx={{'&.MuiTableCell-root':{border:'none'}}}>
                 <label htmlFor="loc" className='label1'> Location:</label>
                 </TableCell>
                 <TableCell sx={{'&.MuiTableCell-root':{border:'none'}}}>
                         <Controller name='loc' control={control} render={({field,fieldState})=>(
-                            <TextField autoComplete='Off' variant='standard' type='text' id = 'loc' {...field} error={!!fieldState.error} helperText ={fieldState.error?.message} />
+                            <TextField autoComplete='Off' select variant='standard' type='text' id = 'loc' {...field} error={!!fieldState.error} helperText ={fieldState.error?.message} >
+                            {locations && locations.map((li)=><MenuItem key={li} value={li}>{li}</MenuItem>)}
+                            </TextField>
                         )}/>
                 </TableCell>
                 </TableRow>
 
-                <TableRow>
+                {/* <TableRow>
                 <TableCell sx={{'&.MuiTableCell-root':{border:'none'}}}>
                 <label htmlFor="street" className='label1'>Street:</label>
                 </TableCell>
@@ -174,9 +204,9 @@ catch(err){
                             <TextField autoComplete='Off' variant='standard' type='text' id = 'street' {...field} error={!!fieldState.error} helperText ={fieldState.error?.message} />
                         )}/>
                 </TableCell>
-                </TableRow>
+                </TableRow> */}
 
-                <TableRow>
+                {/* <TableRow>
                 <TableCell sx={{'&.MuiTableCell-root':{border:'none'}}}>
                 <label htmlFor="zipcode" className='label1'>Zip:</label>
                 </TableCell>
@@ -185,7 +215,7 @@ catch(err){
                             <TextField autocomplete='Off' variant='standard' type='text' id = 'zipcode'  {...field} error={!!fieldState.error} helperText ={fieldState.error?.message}/>
                         )}/>
                 </TableCell>
-                </TableRow> */}
+                </TableRow>  */}
 
 
         </TableBody>
@@ -199,6 +229,7 @@ lineHeight:'1.66',textAlign: 'left',marginTop: '3px',marginRight: '0',marginBott
         </form>
         </Box>
         </>}
+            {flag == true && <ToastMessage  status={status} message = {msg}/>}
     </>)
 }
 

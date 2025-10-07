@@ -28,10 +28,10 @@ const schema_create_company = yup.object({
     revenue: yup.number().required('Total Revenue is required').positive('Should contain only positive value'),
     company_logo: yup.mixed().test('File_Check','Company Logo is required',(value)=>value && value.length >0).test('File Type','Only .jpg, .png or .jpeg files are allowed',(value)=> value && ['image/png','image/jpg','image/jpeg'].includes(value[0]?.type?.toLowerCase()))
                   .test('file size','max file shouldnt exceed 2MB',(value)=>value && value[0]?.size <= 2*1024*1204),
-    // address: yup.array().of(
-    //     yup.object({loc: yup.string().required('Location is required'),
-    // street: yup.string().required('Street name is required'),
-    // zipcode: yup.number().required('Pincode is required').min(6,'Minimum length is 6 characters').max(6,'Maximum length shouldn\'t exceed 6 characters')})
-    // )
+    address: yup.array().of(
+        yup.object({loc: yup.string().required('Location is required').oneOf(['Chennai','Mumbai','Hyderabad','Bangalore','Kochi','Delhi','Jaipur'],'Only predefined option are allowed to select'),
+    street: yup.string().required('Street name is required'),
+    zipcode: yup.number().required('Pincode is required').min(6,'Minimum length is 6 characters').max(6,'Maximum length shouldn\'t exceed 6 characters')})
+    )
 }) ;
 export {schema_signup,schema_signin,schema_otp,schema_create_company};
